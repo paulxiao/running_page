@@ -12,6 +12,7 @@ import gpxpy
 import polyline
 import requests
 from config import (
+    GPX_EXIST_FOLDER,
     GPX_FOLDER,
     JSON_FILE,
     SQL_FILE,
@@ -493,7 +494,7 @@ def download_keep_tcx(tcx_data, keep_id):
 
 
 def run_keep_sync(
-    email, password, keep_sports_data_api, with_gpx=False, with_tcx=False
+    email, password, keep_sports_data_api, with_gpx=False, with_tcx=False, has_gpx=False
 ):
     generator = Generator(SQL_FILE)
     old_tracks_ids = generator.get_old_tracks_ids()
@@ -501,6 +502,11 @@ def run_keep_sync(
         email, password, old_tracks_ids, keep_sports_data_api, with_gpx, with_tcx
     )
     generator.sync_from_app(new_tracks)
+
+    # 如果指定了 GPX 目录，同时处理该目录中的文件
+    if has_gpx:
+        print(f"syncing GPX files from {GPX_EXIST_FOLDER}")
+        generator.sync_from_data_dir(GPX_EXIST_FOLDER, file_suffix="gpx")
 
     activities_list = generator.load()
     with open(JSON_FILE, "w") as f:
@@ -530,6 +536,12 @@ if __name__ == "__main__":
         action="store_true",
         help="get all keep data to tcx and download",
     )
+    parser.add_argument(
+        "--has-gpx",
+        dest="has_gpx",
+        action="store_true",
+        help="use gpx data output",
+    )
     options = parser.parse_args()
     for _tpye in options.sync_types:
         assert (
@@ -541,4 +553,5 @@ if __name__ == "__main__":
         options.sync_types,
         options.with_gpx,
         options.with_tcx,
+        options.has_gpx,
     )

@@ -7,6 +7,7 @@ parent = os.path.dirname(current)
 
 OUTPUT_DIR = os.path.join(parent, "activities")
 GPX_FOLDER = os.path.join(parent, "GPX_OUT")
+GPX_EXIST_FOLDER = os.path.join(parent, "GPX_EXIST")
 TCX_FOLDER = os.path.join(parent, "TCX_OUT")
 FIT_FOLDER = os.path.join(parent, "FIT_OUT")
 PNG_FOLDER = os.path.join(parent, "PNG_OUT")
@@ -15,6 +16,7 @@ FOLDER_DICT = {
     "gpx": GPX_FOLDER,
     "tcx": TCX_FOLDER,
     "fit": FIT_FOLDER,
+    "gpx_exist": GPX_EXIST_FOLDER,
 }
 SQL_FILE = os.path.join(parent, "run_page", "data.db")
 JSON_FILE = os.path.join(parent, "src", "static", "activities.json")
